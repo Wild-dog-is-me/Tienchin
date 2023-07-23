@@ -54,6 +54,25 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
         return activityVO;
     }
 
+    @Override
+    public AjaxResult updateActivity(ActivityVO activityVO) {
+        Activity activity = new Activity();
+        BeanUtils.copyProperties(activityVO, activity);
+        activity.setDelFlag(null);
+        activity.setCreateBy(null);
+        activity.setCreateTime(null);
+        activity.setUpdateTime(LocalDateTime.now());
+        activity.setUpdateBy(SecurityUtils.getUsername());
+        return updateById(activity) ? AjaxResult.success("修改成功") : AjaxResult.error("修改失败");
+    }
+
+    @Override
+    public Boolean deleteActivityByIds(Long[] activityIds) {
+        UpdateWrapper<Activity> uw = new UpdateWrapper<>();
+        uw.lambda().set(Activity::getDelFlag, 1).in(Activity::getActivityId, activityIds);
+        return update(uw);
+    }
+
     public boolean expireActivity() {
         UpdateWrapper<Activity> uw = new UpdateWrapper();
         uw.lambda().set(Activity::getStatus, 0).eq(Activity::getStatus, 1).lt(Activity::getEndTime, LocalDateTime.now());
