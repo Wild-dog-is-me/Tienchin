@@ -231,6 +231,12 @@
                 <artifactId>tienchin-course</artifactId>
                 <version>${tienchin.version}</version>
             </dependency>
+            <!-- 线索管理-->
+            <dependency>
+                <groupId>org.javaboy</groupId>
+                <artifactId>tienchin-clue</artifactId>
+                <version>${tienchin.version}</version>
+            </dependency>
 
             <!-- lombok依赖包 -->
             <dependency>
