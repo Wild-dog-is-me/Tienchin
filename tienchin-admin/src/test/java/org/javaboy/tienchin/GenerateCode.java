@@ -54,7 +54,7 @@ public class GenerateCode {
                 })
                 .packageConfig(builder -> {
                     builder.parent("org.javaboy.tienchin") // 设置父包名
-                            .moduleName("channel") // 设置父包模块名
+                            .moduleName("activity") // 设置父包模块名
                             .pathInfo(Collections.singletonMap(OutputFile.xml, path + "/resources/mapper")); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
