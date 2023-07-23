@@ -68,7 +68,7 @@ public class GenerateCode {
     @Test
     void generateCourseCode() {
 
-        String path = "/Users/odin/Documents/ruo-yi-study/my-study/code/tienchin/tienchin-activity/src/main";
+        String path = "/Users/odin/Documents/ruo-yi-study/my-study/code/tienchin/tienchin-course/src/main";
 
         FastAutoGenerator.create("jdbc:mysql://localhost:3306/ruoyi?serverTimezone=Asia/Shanghai&useSSL=false", "root", "root")
                 .globalConfig(builder -> {

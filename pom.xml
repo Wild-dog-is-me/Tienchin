@@ -225,6 +225,13 @@
                 <artifactId>tienchin-activity</artifactId>
                 <version>${tienchin.version}</version>
             </dependency>
+            <!-- 课程管理-->
+            <dependency>
+                <groupId>org.javaboy</groupId>
+                <artifactId>tienchin-course</artifactId>
+                <version>${tienchin.version}</version>
+            </dependency>
+
             <!-- lombok依赖包 -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
