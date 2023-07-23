@@ -1,5 +1,6 @@
 package org.javaboy.tienchin.common.core.domain.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -232,8 +233,8 @@ public class LoginUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (permissions != null && permissions.size() > 0) {
-            return permissions.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+            return permissions.stream().map(p -> new SimpleGrantedAuthority(p)).collect(Collectors.toList());
         }
-        return null;
+        return new ArrayList<>();
     }
 }

@@ -4,5 +4,17 @@
 
     <select id="selectChannelList" resultType="org.javaboy.tienchin.channel.domain.Channel">
         select * from tienchin_channel where del_flag=0
+        <if test="channelName!=null">
+            and channel_name=#{channelName}
+        </if>
+        <if test="status!=null">
+            and status=#{status}
+        </if>
+        <if test="type!=null">
+            and type=#{type}
+        </if>
+        <if test="params.beginTime!=null and params.endTime!=null">
+            and create_time between #{params.beginTime} and #{params.endTime}
+        </if>
     </select>
 </mapper>

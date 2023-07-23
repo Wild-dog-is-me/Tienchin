@@ -31,7 +31,8 @@ public class CustomSecurityExpressionRoot extends SecurityExpressionRoot impleme
     }
 
     public boolean hasPermission(String permission) {
-        // 获取当前登陆用户所具有的权限
+        //获取当前登录用户所具有的权限
+        //这里实际上调用到的是 org.javaboy.tienchin.common.core.domain.model.LoginUser.getAuthorities 方法的返回值
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority authority : authorities) {
             if (antPathMatcher.match(authority.getAuthority(), permission)) {

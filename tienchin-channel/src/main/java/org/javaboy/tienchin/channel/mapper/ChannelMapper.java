@@ -2,6 +2,7 @@ package org.javaboy.tienchin.channel.mapper;
 
 import org.javaboy.tienchin.channel.domain.Channel;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.javaboy.tienchin.channel.domain.vo.ChannelVO;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ import java.util.List;
  */
 public interface ChannelMapper extends BaseMapper<Channel> {
 
-    List<Channel> selectChannelList();
+    List<Channel> selectChannelList(ChannelVO channelVO);
 }

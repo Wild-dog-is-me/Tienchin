@@ -3,6 +3,8 @@ package org.javaboy.tienchin.channel.domain;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import org.javaboy.tienchin.common.annotation.Excel;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -19,31 +21,36 @@ public class Channel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 渠道ID
-     */
     @TableId(value = "channel_id", type = IdType.AUTO)
+    @Excel(name = "渠道编号", cellType = Excel.ColumnType.NUMERIC)
     private Integer channelId;
 
     /**
      * 渠道名称
      */
+    @Excel(name = "渠道名称")
     private String channelName;
 
     /**
      * 渠道状态
      */
+    @Excel(name = "渠道状态", readConverterExp = "1=正常,0=禁用")
     private Byte status;
 
     /**
      * 备注信息
      */
+    @Excel(name = "渠道备注")
     private String remark;
 
+
     /**
-     * 渠道类型 - 1:线上渠道 ｜ 2:线下渠道
+     * 渠道类型：1 线上渠道 2 线下渠道
      */
+    @Excel(name = "渠道类型", readConverterExp = "1=线上渠道,2=线下渠道")
     private Integer type;
+
+    private Integer delFlag;
 
     private String createBy;
 
@@ -52,11 +59,6 @@ public class Channel implements Serializable {
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
-
-    /**
-     * 删除标志 - 0:存在 ｜ 2:删除
-     */
-    private Integer delFlag;
 
     public Integer getChannelId() {
         return channelId;
