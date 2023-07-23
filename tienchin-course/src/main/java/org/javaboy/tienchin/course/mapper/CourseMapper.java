@@ -2,6 +2,9 @@ package org.javaboy.tienchin.course.mapper;
 
 import org.javaboy.tienchin.course.domin.Course;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.javaboy.tienchin.course.domin.vo.CourseVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface CourseMapper extends BaseMapper<Course> {
 
+    List<Course> selectCourseList(CourseVO courseVO);
 }
