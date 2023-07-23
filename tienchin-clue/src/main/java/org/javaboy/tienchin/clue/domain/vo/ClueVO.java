@@ -1,4 +1,4 @@
-package org.javaboy.tienchin.clue.domain;
+package org.javaboy.tienchin.clue.domain.vo;
 
 import org.javaboy.tienchin.common.core.domain.BaseEntity;
 

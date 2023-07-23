@@ -1,4 +1,4 @@
-package org.javaboy.tienchin.course.domin.vo;
+package org.javaboy.tienchin.course.domain.vo;
 
 /**
  * @Author: Odin

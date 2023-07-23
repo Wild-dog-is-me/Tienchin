@@ -1,4 +1,4 @@
-package org.javaboy.tienchin.course.domin;
+package org.javaboy.tienchin.course.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

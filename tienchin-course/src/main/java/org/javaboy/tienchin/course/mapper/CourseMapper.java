@@ -1,8 +1,8 @@
 package org.javaboy.tienchin.course.mapper;
 
-import org.javaboy.tienchin.course.domin.Course;
+import org.javaboy.tienchin.course.domain.Course;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.javaboy.tienchin.course.domin.vo.CourseVO;
+import org.javaboy.tienchin.course.domain.vo.CourseVO;
 
 import java.util.List;
 

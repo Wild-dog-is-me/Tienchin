@@ -7,11 +7,10 @@ import org.javaboy.tienchin.common.core.page.TableDataInfo;
 import org.javaboy.tienchin.common.enums.BusinessType;
 import org.javaboy.tienchin.common.utils.poi.ExcelUtil;
 import org.javaboy.tienchin.common.validator.EditGroup;
-import org.javaboy.tienchin.course.domin.Course;
-import org.javaboy.tienchin.course.domin.vo.CourseVO;
+import org.javaboy.tienchin.course.domain.Course;
+import org.javaboy.tienchin.course.domain.vo.CourseVO;
 import org.javaboy.tienchin.course.service.ICourseService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

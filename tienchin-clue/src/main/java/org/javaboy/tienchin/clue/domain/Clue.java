@@ -1,6 +1,13 @@
 package org.javaboy.tienchin.clue.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import org.javaboy.tienchin.common.validator.CreateGroup;
+import org.javaboy.tienchin.common.validator.EditGroup;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -20,11 +27,14 @@ public class Clue implements Serializable {
     /**
      * 线索编号
      */
+    @TableId(value = "clue_id", type = IdType.AUTO)
+    @NotNull(message = "{clue.clueId.notnull}",groups = EditGroup.class)
     private Integer clueId;
 
     /**
      * 客户姓名
      */
+    @NotBlank(message = "{clue.name.notblank}",groups = {EditGroup.class, CreateGroup.class})
     private String name;
 
     /**
@@ -38,7 +48,7 @@ public class Clue implements Serializable {
     private Integer activityId;
 
     /**
-     * 0:男 1:女
+     * 0 男 1女
      */
     private Integer gender;
 
@@ -60,10 +70,11 @@ public class Clue implements Serializable {
     /**
      * 客户电话
      */
+    @NotBlank(message = "{clue.phone.notblank}",groups = {EditGroup.class, CreateGroup.class})
     private String phone;
 
     /**
-     * 意向等级 - 1:近期报名 2:打算报名 3:了解一下 4:打酱油
+     * 客户意向等级 1 近期报名 2 打算报名，考虑中 3 了解一下 4 打酱油
      */
     private Integer level;
 
@@ -73,12 +84,12 @@ public class Clue implements Serializable {
     private Integer subject;
 
     /**
-     * 线索状态 - 1:已分配 2:跟进中 3:线索回收 4:伪线索
+     * 线索状态 1 已分配 2 跟进中 3 回收 4 伪线索
      */
     private Integer status;
 
     /**
-     * 伪线索失败次数 最大3次
+     * 伪线索失败次数，最大 3 次
      */
     private Integer failCount;
 
@@ -93,7 +104,7 @@ public class Clue implements Serializable {
     private LocalDateTime endTime;
 
     /**
-     * 线索是否需要转换
+     * 线索是否需要转派
      */
     private Boolean transfer;
 
@@ -108,6 +119,14 @@ public class Clue implements Serializable {
     private String updateBy;
 
     private Integer delFlag;
+
+    public Integer getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
+    }
 
     public Integer getClueId() {
         return clueId;
@@ -277,39 +296,30 @@ public class Clue implements Serializable {
         this.updateBy = updateBy;
     }
 
-    public Integer getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(Integer delFlag) {
-        this.delFlag = delFlag;
-    }
-
     @Override
     public String toString() {
         return "Clue{" +
-            "clueId = " + clueId +
-            ", name = " + name +
-            ", channelId = " + channelId +
-            ", activityId = " + activityId +
-            ", gender = " + gender +
-            ", age = " + age +
-            ", weixin = " + weixin +
-            ", qq = " + qq +
-            ", phone = " + phone +
-            ", level = " + level +
-            ", subject = " + subject +
-            ", status = " + status +
-            ", failCount = " + failCount +
-            ", nextTime = " + nextTime +
-            ", endTime = " + endTime +
-            ", transfer = " + transfer +
-            ", remark = " + remark +
-            ", createTime = " + createTime +
-            ", createBy = " + createBy +
-            ", updateTime = " + updateTime +
-            ", updateBy = " + updateBy +
-            ", delFlag = " + delFlag +
-        "}";
+                "clueId = " + clueId +
+                ", name = " + name +
+                ", channelId = " + channelId +
+                ", activityId = " + activityId +
+                ", gender = " + gender +
+                ", age = " + age +
+                ", weixin = " + weixin +
+                ", qq = " + qq +
+                ", phone = " + phone +
+                ", level = " + level +
+                ", subject = " + subject +
+                ", status = " + status +
+                ", failCount = " + failCount +
+                ", nextTime = " + nextTime +
+                ", endTime = " + endTime +
+                ", transfer = " + transfer +
+                ", remark = " + remark +
+                ", createTime = " + createTime +
+                ", createBy = " + createBy +
+                ", updateTime = " + updateTime +
+                ", updateBy = " + updateBy +
+                "}";
     }
 }

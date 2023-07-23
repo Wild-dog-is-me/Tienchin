@@ -1,5 +1,6 @@
 package org.javaboy.tienchin.activity.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.javaboy.tienchin.activity.domain.Activity;
 import org.javaboy.tienchin.activity.domain.vo.ActivityVO;
@@ -73,6 +74,13 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
         return update(uw);
     }
 
+    @Override
+    public AjaxResult selectActivityByChannelId(Integer channelId) {
+        QueryWrapper<Activity> qw = new QueryWrapper<>();
+        qw.lambda().eq(Activity::getChannelId, channelId);
+        return AjaxResult.success(list(qw));
+    }
+    
     public boolean expireActivity() {
         UpdateWrapper<Activity> uw = new UpdateWrapper();
         uw.lambda().set(Activity::getStatus, 0).eq(Activity::getStatus, 1).lt(Activity::getEndTime, LocalDateTime.now());

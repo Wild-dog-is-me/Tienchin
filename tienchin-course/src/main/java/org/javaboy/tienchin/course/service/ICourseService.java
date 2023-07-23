@@ -1,9 +1,9 @@
 package org.javaboy.tienchin.course.service;
 
 import org.javaboy.tienchin.common.core.domain.AjaxResult;
-import org.javaboy.tienchin.course.domin.Course;
+import org.javaboy.tienchin.course.domain.Course;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.javaboy.tienchin.course.domin.vo.CourseVO;
+import org.javaboy.tienchin.course.domain.vo.CourseVO;
 
 import java.util.List;
 
