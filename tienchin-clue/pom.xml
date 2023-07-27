@@ -21,6 +21,14 @@
             <groupId>org.javaboy</groupId>
             <artifactId>tienchin-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.javaboy</groupId>
+            <artifactId>tienchin-assignment</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.javaboy</groupId>
+            <artifactId>tienchin-follow</artifactId>
+        </dependency>
 
     </dependencies>
 

@@ -103,7 +103,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.javaboy</groupId>
+            <groupId>ORG.javaboy</groupId>
             <artifactId>tienchin-assignment</artifactId>
         </dependency>
 

@@ -1,6 +1,10 @@
 package org.javaboy.tienchin.assignment.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -18,39 +22,44 @@ public class Assignment implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 分配ID
+     * 分配的ID
      */
+    @TableId(value = "aid", type = IdType.AUTO)
     private Integer aid;
 
     /**
-     * 1:线索 2:商机
+     * 1 线索 2 商机
      */
     private Integer type;
 
     /**
-     * 线索或商机ID
+     * 线索或者商机的 ID
      */
-    private Integer assginId;
+    @NotNull(message = "{assignment.assignId.notnull}")
+    private Integer assignId;
 
     /**
-     * 线索商机所属用户ID
+     * 线索所属的用户ID
      */
-    private Integer userId;
+    @NotNull(message = "{assignment.userId.notnull}")
+    private Long userId;
 
     /**
-     * 线索所属用户名
+     * 线索所属的用户名
      */
+    @NotNull(message = "{assignment.userName.notblank}")
     private String userName;
 
     /**
-     * 线索所属用户部门ID
+     * 线索所属用户的部门ID
      */
-    private Integer deptId;
+    @NotNull(message = "{assignment.deptId.notnull}")
+    private Long deptId;
 
     /**
      * 是否是当前最新分配人
      */
-    private Boolean lastest;
+    private Boolean latest;
 
     private LocalDateTime createTime;
 
@@ -58,11 +67,8 @@ public class Assignment implements Serializable {
 
     private String createBy;
 
-    private LocalDateTime updateBy;
+    private String updateBy;
 
-    /**
-     * 备注
-     */
     private String remark;
 
     public Integer getAid() {
@@ -81,19 +87,19 @@ public class Assignment implements Serializable {
         this.type = type;
     }
 
-    public Integer getAssginId() {
-        return assginId;
+    public Integer getAssignId() {
+        return assignId;
     }
 
-    public void setAssginId(Integer assginId) {
-        this.assginId = assginId;
+    public void setAssignId(Integer assignId) {
+        this.assignId = assignId;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -105,20 +111,20 @@ public class Assignment implements Serializable {
         this.userName = userName;
     }
 
-    public Integer getDeptId() {
+    public Long getDeptId() {
         return deptId;
     }
 
-    public void setDeptId(Integer deptId) {
+    public void setDeptId(Long deptId) {
         this.deptId = deptId;
     }
 
-    public Boolean getLastest() {
-        return lastest;
+    public Boolean getLatest() {
+        return latest;
     }
 
-    public void setLastest(Boolean lastest) {
-        this.lastest = lastest;
+    public void setLatest(Boolean latest) {
+        this.latest = latest;
     }
 
     public LocalDateTime getCreateTime() {
@@ -145,11 +151,11 @@ public class Assignment implements Serializable {
         this.createBy = createBy;
     }
 
-    public LocalDateTime getUpdateBy() {
+    public String getUpdateBy() {
         return updateBy;
     }
 
-    public void setUpdateBy(LocalDateTime updateBy) {
+    public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
     }
 
@@ -164,18 +170,18 @@ public class Assignment implements Serializable {
     @Override
     public String toString() {
         return "Assignment{" +
-            "aid = " + aid +
-            ", type = " + type +
-            ", assginId = " + assginId +
-            ", userId = " + userId +
-            ", userName = " + userName +
-            ", deptId = " + deptId +
-            ", lastest = " + lastest +
-            ", createTime = " + createTime +
-            ", updateTime = " + updateTime +
-            ", createBy = " + createBy +
-            ", updateBy = " + updateBy +
-            ", remark = " + remark +
-        "}";
+                "aid = " + aid +
+                ", type = " + type +
+                ", assginId = " + assignId  +
+                ", userId = " + userId +
+                ", userName = " + userName +
+                ", deptId = " + deptId +
+                ", latest = " + latest +
+                ", createTime = " + createTime +
+                ", updateTime = " + updateTime +
+                ", createBy = " + createBy +
+                ", updateBy = " + updateBy +
+                ", remark = " + remark +
+                "}";
     }
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Validator;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.javaboy.tienchin.common.core.domain.AjaxResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -501,4 +503,11 @@ public class SysUserServiceImpl implements ISysUserService {
         }
         return successMsg.toString();
     }
+
+    @Override
+    public AjaxResult getUserByDeptId(Long deptId) {
+        List<SysUser> users = userMapper.getUsersByDeptId(deptId);
+        return AjaxResult.success(users);
+    }
+
 }

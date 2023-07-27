@@ -50,3 +50,10 @@ export function delDept(deptId) {
     method: 'delete'
   })
 }
+
+export function treeselect() {
+  return request({
+    url: '/system/dept/treeselect',
+    method: 'get'
+  })
+}

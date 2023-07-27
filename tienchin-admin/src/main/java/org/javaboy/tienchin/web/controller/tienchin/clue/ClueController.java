@@ -3,20 +3,26 @@ package org.javaboy.tienchin.web.controller.tienchin.clue;
 import org.javaboy.tienchin.activity.service.IActivityService;
 import org.javaboy.tienchin.channel.service.IChannelService;
 import org.javaboy.tienchin.clue.domain.Clue;
+import org.javaboy.tienchin.clue.domain.vo.ClueSummary;
+import org.javaboy.tienchin.clue.domain.vo.ClueVO;
 import org.javaboy.tienchin.clue.service.IClueService;
 import org.javaboy.tienchin.common.annotation.Log;
+import org.javaboy.tienchin.common.core.controller.BaseController;
 import org.javaboy.tienchin.common.core.domain.AjaxResult;
+import org.javaboy.tienchin.common.core.page.TableDataInfo;
 import org.javaboy.tienchin.common.enums.BusinessType;
 import org.javaboy.tienchin.common.validator.CreateGroup;
+import org.javaboy.tienchin.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author Odin
@@ -25,7 +31,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/tienchin/clue")
-public class ClueController {
+public class ClueController extends BaseController {
 
     @Resource
     private IClueService clueService;
@@ -35,6 +41,9 @@ public class ClueController {
 
     @Resource
     private IActivityService activityService;
+
+    @Resource
+    private ISysUserService sysUserService;
 
     @PreAuthorize("hasPermission('tienchin:clue:create')")
     @Log(title = "线索管理", businessType = BusinessType.INSERT)
@@ -53,5 +62,25 @@ public class ClueController {
     @GetMapping("/activity/{channelId}")
     public AjaxResult getActivityByChannelId(@PathVariable Integer channelId) {
         return activityService.selectActivityByChannelId(channelId);
+    }
+
+    @PreAuthorize("hasPermission('tienchin:clue:list')")
+    @GetMapping("/list")
+    public TableDataInfo list(ClueVO clueVO) {
+        startPage();
+        List<ClueSummary> list = clueService.selectClueList(clueVO);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/users/{deptId}")
+    @PreAuthorize("hasPermission('tienchin:clue:assignment')")
+    public AjaxResult getUserByDeptId(@PathVariable Long deptId) {
+        return sysUserService.getUserByDeptId(deptId);
+    }
+
+    @GetMapping("/{clueId}")
+    @PreAuthorize("hasAnyPermissions('tienchin:clue:view','tienchin:clue:follow')")
+    public AjaxResult getClueDetailsByClueId(@PathVariable Integer clueId) {
+        return clueService.getClueDetailsByClueId(clueId);
     }
 }
