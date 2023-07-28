@@ -3,6 +3,7 @@ package org.javaboy.tienchin.web.controller.tienchin.clue;
 import org.javaboy.tienchin.activity.service.IActivityService;
 import org.javaboy.tienchin.channel.service.IChannelService;
 import org.javaboy.tienchin.clue.domain.Clue;
+import org.javaboy.tienchin.clue.domain.vo.ClueDetails;
 import org.javaboy.tienchin.clue.domain.vo.ClueSummary;
 import org.javaboy.tienchin.clue.domain.vo.ClueVO;
 import org.javaboy.tienchin.clue.service.IClueService;
@@ -12,6 +13,7 @@ import org.javaboy.tienchin.common.core.domain.AjaxResult;
 import org.javaboy.tienchin.common.core.page.TableDataInfo;
 import org.javaboy.tienchin.common.enums.BusinessType;
 import org.javaboy.tienchin.common.validator.CreateGroup;
+import org.javaboy.tienchin.common.validator.EditGroup;
 import org.javaboy.tienchin.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -79,8 +81,39 @@ public class ClueController extends BaseController {
     }
 
     @GetMapping("/{clueId}")
-    @PreAuthorize("hasAnyPermissions('tienchin:clue:view','tienchin:clue:follow')")
     public AjaxResult getClueDetailsByClueId(@PathVariable Integer clueId) {
         return clueService.getClueDetailsByClueId(clueId);
     }
+
+    @PreAuthorize("hasPermission('tienchin:clue:follow')")
+    @PostMapping("/follow")
+    public AjaxResult clueFollow(@RequestBody ClueDetails clueDetails) {
+        return clueService.clueFollow(clueDetails);
+    }
+
+    @PreAuthorize("hasPermission('tienchin:clue:follow')")
+    @PostMapping("/invalid")
+    public AjaxResult invalidClueFollow(@RequestBody ClueDetails clueDetails) {
+        return clueService.invalidClueFollow(clueDetails);
+    }
+
+    @GetMapping("/summary/{clueId}")
+    @PreAuthorize("hasPermission('tienchin:clue:edit')")
+    public AjaxResult getClueSummaryByClueId(@PathVariable Integer clueId) {
+        return clueService.getClueSummaryByClueId(clueId);
+    }
+
+    @PreAuthorize("hasPermission('tienchin:clue:edit')")
+    @PutMapping
+    public AjaxResult updateClue(@Validated(EditGroup.class) @RequestBody Clue clue) {
+        return clueService.updateClue(clue);
+    }
+
+    @PreAuthorize("hasPermission('tienchin:clue:remove')")
+    @DeleteMapping("/{clueIds}")
+    public AjaxResult deleteClueById(@PathVariable Integer[] clueIds) {
+        return clueService.deleteClueById(clueIds);
+    }
+
+
 }

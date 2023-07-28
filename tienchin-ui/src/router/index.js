@@ -1,4 +1,4 @@
-import { createWebHistory, createRouter } from 'vue-router'
+import {createWebHistory, createRouter} from 'vue-router'
 /* Layout */
 import Layout from '@/layout'
 
@@ -24,7 +24,7 @@ import Layout from '@/layout'
   }
  */
 
-// 公共路由
+// 公共路由，不考虑用户角色/权限等信息，无论用户的身份如何，这些公共路由都是要加入进来的
 export const constantRoutes = [
   {
     path: '/redirect',
@@ -66,7 +66,7 @@ export const constantRoutes = [
         path: '/index',
         component: () => import('@/views/index'),
         name: 'Index',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
+        meta: {title: '首页', icon: 'dashboard', affix: true}
       }
     ]
   },
@@ -80,15 +80,43 @@ export const constantRoutes = [
         path: 'profile',
         component: () => import('@/views/system/user/profile/index'),
         name: 'Profile',
-        meta: { title: '个人中心', icon: 'user' }
+        meta: {title: '个人中心', icon: 'user'}
       }
     ]
   }
 ]
 
 // 动态路由，基于用户权限动态去加载
+//这个动态路由默认情况下，是没有加载的，只有在加载服务端动态菜单的时候，才会去处理这个动态菜单
 export const dynamicRoutes = [
   {
+    path: '/clue/details',
+    component: Layout,
+    hidden: true,
+    permissions: ['tienchin:clue:view', 'tienchin:clue:follow'],
+    children: [
+      {
+        path: 'index/:clueId(\\d+)/:type(\\S+)',
+        component: () => import('@/views/tienchin/clue/details'),
+        name: 'ClueDetails',
+        meta: {title: '线索详情', activeMenu: '/clue'}
+      }
+    ]
+  },
+  {
+    path: '/business/details',
+    component: Layout,
+    hidden: true,
+    permissions: ['tienchin:business:view', 'tienchin:business:follow'],
+    children: [
+      {
+        path: 'index/:businessId(\\d+)/:type(\\S+)',
+        component: () => import('@/views/tienchin/business/details'),
+        name: 'BusinessDetails',
+        meta: {title: '商机详情', activeMenu: '/business'}
+      }
+    ]
+  }, {
     path: '/system/user-auth',
     component: Layout,
     hidden: true,
@@ -98,7 +126,7 @@ export const dynamicRoutes = [
         path: 'role/:userId(\\d+)',
         component: () => import('@/views/system/user/authRole'),
         name: 'AuthRole',
-        meta: { title: '分配角色', activeMenu: '/system/user' }
+        meta: {title: '分配角色', activeMenu: '/system/user'}
       }
     ]
   },
@@ -112,7 +140,7 @@ export const dynamicRoutes = [
         path: 'user/:roleId(\\d+)',
         component: () => import('@/views/system/role/authUser'),
         name: 'AuthUser',
-        meta: { title: '分配用户', activeMenu: '/system/role' }
+        meta: {title: '分配用户', activeMenu: '/system/role'}
       }
     ]
   },
@@ -126,7 +154,7 @@ export const dynamicRoutes = [
         path: 'index/:dictId(\\d+)',
         component: () => import('@/views/system/dict/data'),
         name: 'Data',
-        meta: { title: '字典数据', activeMenu: '/system/dict' }
+        meta: {title: '字典数据', activeMenu: '/system/dict'}
       }
     ]
   },
@@ -137,10 +165,10 @@ export const dynamicRoutes = [
     permissions: ['monitor:job:list'],
     children: [
       {
-        path: 'index/:jobId(\\d+)',
+        path: 'index',
         component: () => import('@/views/monitor/job/log'),
         name: 'JobLog',
-        meta: { title: '调度日志', activeMenu: '/monitor/job' }
+        meta: {title: '调度日志', activeMenu: '/monitor/job'}
       }
     ]
   },
@@ -154,7 +182,7 @@ export const dynamicRoutes = [
         path: 'index/:tableId(\\d+)',
         component: () => import('@/views/tool/gen/editTable'),
         name: 'GenEdit',
-        meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
+        meta: {title: '修改生成配置', activeMenu: '/tool/gen'}
       }
     ]
   }
@@ -167,7 +195,7 @@ const router = createRouter({
     if (savedPosition) {
       return savedPosition
     } else {
-      return { top: 0 }
+      return {top: 0}
     }
   },
 });

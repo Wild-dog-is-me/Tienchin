@@ -1,5 +1,6 @@
 package org.javaboy.tienchin.follow.service;
 
+import org.javaboy.tienchin.common.core.domain.AjaxResult;
 import org.javaboy.tienchin.follow.domain.FollowRecord;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IFollowRecordService extends IService<FollowRecord> {
 
+    AjaxResult getFollowRecordByClueId(Integer clueId);
 }

@@ -61,6 +61,6 @@
                  left join tienchin_activity ta on tc.activity_id = ta.activity_id
                  left join tienchin_channel tch on tc.channel_id = tch.channel_id
                  left join tienchin_assignment tas on tc.clue_id = tas.assign_id and tas.latest = true
-
+        where tc.clue_id = #{cludId}
     </select>
 </mapper>
