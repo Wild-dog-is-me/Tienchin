@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.javaboy.tienchin.assignment.domain.Assignment;
 import org.javaboy.tienchin.assignment.service.IAssignmentService;
+import org.javaboy.tienchin.business.domain.Business;
+import org.javaboy.tienchin.business.service.IBusinessService;
 import org.javaboy.tienchin.clue.domain.Clue;
 import org.javaboy.tienchin.clue.domain.vo.ClueDetails;
 import org.javaboy.tienchin.clue.domain.vo.ClueSummary;
@@ -49,6 +51,9 @@ public class ClueServiceImpl extends ServiceImpl<ClueMapper, Clue> implements IC
 
     @Resource
     private IFollowRecordService followRecordService;
+
+    @Resource
+    private IBusinessService businessService;
 
     @Override
     public AjaxResult addClue(Clue clue) {
@@ -145,6 +150,42 @@ public class ClueServiceImpl extends ServiceImpl<ClueMapper, Clue> implements IC
         UpdateWrapper<Clue> uw = new UpdateWrapper<>();
         uw.lambda().set(Clue::getDelFlag, 1).eq(Clue::getClueId, clueIds);
         return update(uw) ? AjaxResult.success("更新成功") : AjaxResult.error("更新失败");
+    }
+
+    @Override
+    @Transactional
+    public AjaxResult clue2Business(Integer clueId) {
+        Clue clue = getById(clueId);
+        Business business = new Business();
+        BeanUtils.copyProperties(clue, business);
+        business.setCreateBy(SecurityUtils.getUsername());
+        business.setCreateTime(LocalDateTime.now());
+        business.setEndTime(null);
+        business.setFailCount(0);
+        business.setNextTime(null);
+        business.setRemark(null);
+        business.setUpdateBy(null);
+        business.setUpdateTime(null);
+        business.setNextTime(LocalDateTime.now().plusHours(TienChinConstants.NEXT_FOLLOW_TIME));
+        business.setStatus(TienChinConstants.BUSINESS_ALLOCATED);
+        //1. 删除线索
+        UpdateWrapper<Clue> uw = new UpdateWrapper<>();
+        uw.lambda().set(Clue::getDelFlag, 1).eq(Clue::getClueId, clueId);
+        update(uw);
+        //2。添加商机
+        businessService.save(business);
+        //3. 默认情况下，将商机分配给 admin，将来由 admin再将商机分配给不同的客户专员
+        Assignment assignment = new Assignment();
+        assignment.setUserName(TienChinConstants.AMDIN_USERNAME);
+        assignment.setType(TienChinConstants.BUSINESS_TYPE);
+        assignment.setCreateBy(SecurityUtils.getUsername());
+        assignment.setCreateTime(LocalDateTime.now());
+        assignment.setAssignId(business.getBusinessId());
+        assignment.setDeptId(TienChinConstants.ADMIN_DEPT_ID);
+        assignment.setUserId(TienChinConstants.ADMIN_ID);
+        assignment.setLatest(true);
+        assignmentService.save(assignment);
+        return AjaxResult.success("线索成功转为商机");
     }
 
 }

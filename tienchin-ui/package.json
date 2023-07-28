@@ -20,6 +20,7 @@
     "@vueuse/core": "9.5.0",
     "axios": "0.27.2",
     "echarts": "5.4.0",
+    "element-china-area-data": "^6.0.2",
     "element-plus": "2.2.27",
     "file-saver": "2.0.5",
     "fuse.js": "6.6.2",

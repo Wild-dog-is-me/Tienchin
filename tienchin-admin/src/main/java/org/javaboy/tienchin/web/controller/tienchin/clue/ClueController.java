@@ -116,4 +116,11 @@ public class ClueController extends BaseController {
     }
 
 
+    @PreAuthorize("hasPermission('tienchin:clue:follow')")
+    @PostMapping("/to_business/{clueId}")
+    public AjaxResult clue2Business(@PathVariable Integer clueId) {
+        return clueService.clue2Business(clueId);
+    }
+
+
 }

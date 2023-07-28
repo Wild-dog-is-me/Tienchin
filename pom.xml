@@ -247,6 +247,11 @@
                 <artifactId>tienchin-follow</artifactId>
                 <version>${tienchin.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.javaboy</groupId>
+                <artifactId>tienchin-business</artifactId>
+                <version>${tienchin.version}</version>
+            </dependency>
 
             <!-- lombok依赖包 -->
             <dependency>

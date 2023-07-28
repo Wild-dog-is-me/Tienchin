@@ -2,7 +2,11 @@ package org.javaboy.tienchin.web.controller.tienchin.clue;
 
 import org.javaboy.tienchin.assignment.domain.Assignment;
 import org.javaboy.tienchin.assignment.service.IAssignmentService;
+import org.javaboy.tienchin.business.domain.Business;
+import org.javaboy.tienchin.business.service.IBusinessService;
+import org.javaboy.tienchin.common.annotation.Log;
 import org.javaboy.tienchin.common.core.domain.AjaxResult;
+import org.javaboy.tienchin.common.enums.BusinessType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -28,8 +32,13 @@ public class AssignmentController {
     @Resource
     private IAssignmentService assignmentService;
 
+    @Resource
+    private IBusinessService businessService;
+
     @PostMapping
     public AjaxResult assignClue(@Validated @RequestBody Assignment assignment) {
         return assignmentService.assignClue(assignment);
     }
+
+
 }
