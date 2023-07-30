@@ -14,7 +14,8 @@ tienchin:
   addressEnabled: false
   # 验证码类型 math 数组计算 char 字符验证
   captchaType: char
-
+  contract:
+    file: /Users/odin/Desktop/contract_file
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080

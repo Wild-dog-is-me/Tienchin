@@ -510,4 +510,10 @@ public class SysUserServiceImpl implements ISysUserService {
         return AjaxResult.success(users);
     }
 
+    @Override
+    public AjaxResult getUsersByDeptId(Long deptId) {
+        List<SysUser> list = userMapper.getUsersByDeptId(deptId);
+        return AjaxResult.success(list);
+    }
+
 }
