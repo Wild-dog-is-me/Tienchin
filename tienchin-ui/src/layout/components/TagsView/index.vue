@@ -94,7 +94,7 @@ function isAffix(tag) {
 }
 function isFirstView() {
   try {
-    return selectedTag.value.fullPath === '/index' || selectedTag.value.fullPath === visitedViews.value[1].fullPath
+    return selectedTag.value.fullPath === visitedViews.value[1].fullPath || selectedTag.value.fullPath === '/index'
   } catch (err) {
     return false
   }
@@ -141,9 +141,6 @@ function addTags() {
   const { name } = route
   if (name) {
     useTagsViewStore().addView(route)
-    if (route.meta.link) {
-      useTagsViewStore().addIframeView(route);
-    }
   }
   return false
 }
@@ -162,9 +159,6 @@ function moveToCurrentTag() {
 }
 function refreshSelectedTag(view) {
   proxy.$tab.refreshPage(view);
-  if (route.meta.link) {
-    useTagsViewStore().delIframeView(route);
-  }
 }
 function closeSelectedTag(view) {
   proxy.$tab.closePage(view).then(({ visitedViews }) => {

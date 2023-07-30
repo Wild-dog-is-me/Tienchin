@@ -75,7 +75,12 @@
          </el-table-column>
          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="CircleClose" @click="cancelAuthUser(scope.row)" v-hasPermi="['system:role:remove']">取消授权</el-button>
+               <el-button
+                  type="text"
+                  icon="CircleClose"
+                  @click="cancelAuthUser(scope.row)"
+                  v-hasPermi="['system:role:remove']"
+               >取消授权</el-button>
             </template>
          </el-table-column>
       </el-table>

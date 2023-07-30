@@ -12,7 +12,7 @@
       :show-file-list="false"
       :headers="headers"
       class="upload-file-uploader"
-      ref="fileUpload"
+      ref="upload"
     >
       <!-- 上传按钮 -->
       <el-button type="primary">选取文件</el-button>
@@ -70,7 +70,7 @@ const emit = defineEmits();
 const number = ref(0);
 const uploadList = ref([]);
 const baseUrl = import.meta.env.VITE_APP_BASE_API;
-const uploadFileUrl = ref(import.meta.env.VITE_APP_BASE_API + "/common/upload"); // 上传文件服务器地址
+const uploadFileUrl = ref(import.meta.env.VITE_APP_BASE_API + "/common/upload"); // 上传的图片服务器地址
 const headers = ref({ Authorization: "Bearer " + getToken() });
 const fileList = ref([]);
 const showTip = computed(
@@ -100,9 +100,15 @@ watch(() => props.modelValue, val => {
 function handleBeforeUpload(file) {
   // 校检文件类型
   if (props.fileType.length) {
-    const fileName = file.name.split('.');
-    const fileExt = fileName[fileName.length - 1];
-    const isTypeOk = props.fileType.indexOf(fileExt) >= 0;
+    let fileExtension = "";
+    if (file.name.lastIndexOf(".") > -1) {
+      fileExtension = file.name.slice(file.name.lastIndexOf(".") + 1);
+    }
+    const isTypeOk = props.fileType.some((type) => {
+      if (file.type.indexOf(type) > -1) return true;
+      if (fileExtension && fileExtension.indexOf(type) > -1) return true;
+      return false;
+    });
     if (!isTypeOk) {
       proxy.$modal.msgError(`文件格式不正确, 请上传${props.fileType.join("/")}格式文件!`);
       return false;
@@ -133,15 +139,13 @@ function handleUploadError(err) {
 
 // 上传成功回调
 function handleUploadSuccess(res, file) {
-  if (res.code === 200) {
-    uploadList.value.push({ name: res.fileName, url: res.fileName });
-    uploadedSuccessfully();
-  } else {
-    number.value--;
+  uploadList.value.push({ name: res.fileName, url: res.fileName });
+  if (uploadList.value.length === number.value) {
+    fileList.value = fileList.value.filter(f => f.url !== undefined).concat(uploadList.value);
+    uploadList.value = [];
+    number.value = 0;
+    emit("update:modelValue", listToString(fileList.value));
     proxy.$modal.closeLoading();
-    proxy.$modal.msgError(res.msg);
-    proxy.$refs.fileUpload.handleRemove(file);
-    uploadedSuccessfully();
   }
 }
 
@@ -149,17 +153,6 @@ function handleUploadSuccess(res, file) {
 function handleDelete(index) {
   fileList.value.splice(index, 1);
   emit("update:modelValue", listToString(fileList.value));
-}
-
-// 上传结束处理
-function uploadedSuccessfully() {
-  if (number.value > 0 && uploadList.value.length === number.value) {
-    fileList.value = fileList.value.filter(f => f.url !== undefined).concat(uploadList.value);
-    uploadList.value = [];
-    number.value = 0;
-    emit("update:modelValue", listToString(fileList.value));
-    proxy.$modal.closeLoading();
-  }
 }
 
 // 获取文件名称
@@ -176,7 +169,7 @@ function listToString(list, separator) {
   let strs = "";
   separator = separator || ",";
   for (let i in list) {
-    if (list[i].url) {
+    if(undefined !== list[i].url) {
       strs += list[i].url + separator;
     }
   }

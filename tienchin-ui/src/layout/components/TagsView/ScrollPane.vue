@@ -15,7 +15,7 @@ import useTagsViewStore from '@/store/modules/tagsView'
 const tagAndTagSpacing = ref(4);
 const { proxy } = getCurrentInstance();
 
-const scrollWrapper = computed(() => proxy.$refs.scrollContainer.$refs.wrapRef);
+const scrollWrapper = computed(() => proxy.$refs.scrollContainer.$refs.wrap$);
 
 onMounted(() => {
   scrollWrapper.value.addEventListener('scroll', emitScroll, true)
@@ -99,7 +99,7 @@ defineExpose({
     bottom: 0px;
   }
   :deep(.el-scrollbar__wrap) {
-    height: 39px;
+    height: 49px;
   }
 }
 </style>

@@ -19,7 +19,6 @@
                   :expand-on-click-node="false"
                   :filter-node-method="filterNode"
                   ref="deptTreeRef"
-                  node-key="id"
                   highlight-current
                   default-expand-all
                   @node-click="handleNodeClick"
@@ -154,16 +153,36 @@
                <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
                   <template #default="scope">
                      <el-tooltip content="修改" placement="top" v-if="scope.row.userId !== 1">
-                        <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:user:edit']"></el-button>
+                        <el-button
+                           type="text"
+                           icon="Edit"
+                           @click="handleUpdate(scope.row)"
+                           v-hasPermi="['system:user:edit']"
+                        ></el-button>
                      </el-tooltip>
                      <el-tooltip content="删除" placement="top" v-if="scope.row.userId !== 1">
-                        <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:user:remove']"></el-button>
+                        <el-button
+                           type="text"
+                           icon="Delete"
+                           @click="handleDelete(scope.row)"
+                           v-hasPermi="['system:user:remove']"
+                        ></el-button>
                      </el-tooltip>
                      <el-tooltip content="重置密码" placement="top" v-if="scope.row.userId !== 1">
-                         <el-button link type="primary" icon="Key" @click="handleResetPwd(scope.row)" v-hasPermi="['system:user:resetPwd']"></el-button>
+                        <el-button
+                           type="text"
+                           icon="Key"
+                           @click="handleResetPwd(scope.row)"
+                           v-hasPermi="['system:user:resetPwd']"
+                        ></el-button>
                      </el-tooltip>
                      <el-tooltip content="分配角色" placement="top" v-if="scope.row.userId !== 1">
-                        <el-button link type="primary" icon="CircleCheck" @click="handleAuthRole(scope.row)" v-hasPermi="['system:user:edit']"></el-button>
+                        <el-button
+                           type="text"
+                           icon="CircleCheck"
+                           @click="handleAuthRole(scope.row)"
+                           v-hasPermi="['system:user:edit']"
+                        ></el-button>
                      </el-tooltip>
                   </template>
                </el-table-column>
@@ -331,7 +350,8 @@
 
 <script setup name="User">
 import { getToken } from "@/utils/auth";
-import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser, deptTreeSelect } from "@/api/system/user";
+import { treeselect } from "@/api/system/dept";
+import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser } from "@/api/system/user";
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
@@ -409,8 +429,8 @@ watch(deptName, val => {
   proxy.$refs["deptTreeRef"].filter(val);
 });
 /** 查询部门下拉树结构 */
-function getDeptTree() {
-  deptTreeSelect().then(response => {
+function getTreeselect() {
+  treeselect().then(response => {
     deptOptions.value = response.data;
   });
 };
@@ -437,8 +457,6 @@ function handleQuery() {
 function resetQuery() {
   dateRange.value = [];
   proxy.resetForm("queryRef");
-  queryParams.value.deptId = undefined;
-  proxy.$refs.deptTreeRef.setCurrentKey(null);
   handleQuery();
 };
 /** 删除按钮操作 */
@@ -532,6 +550,15 @@ const handleFileSuccess = (response, file, fileList) => {
 function submitFileForm() {
   proxy.$refs["uploadRef"].submit();
 };
+/** 初始化部门数据 */
+function initTreeData() {
+  // 判断部门的数据是否存在，存在不获取，不存在则获取
+  if (deptOptions.value === undefined) {
+    treeselect().then(response => {
+      deptOptions.value = response.data;
+    });
+  }
+};
 /** 重置操作表单 */
 function reset() {
   form.value = {
@@ -558,6 +585,7 @@ function cancel() {
 /** 新增按钮操作 */
 function handleAdd() {
   reset();
+  initTreeData();
   getUser().then(response => {
     postOptions.value = response.posts;
     roleOptions.value = response.roles;
@@ -569,6 +597,7 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
+  initTreeData();
   const userId = row.userId || ids.value;
   getUser(userId).then(response => {
     form.value = response.data;
@@ -602,6 +631,6 @@ function submitForm() {
   });
 };
 
-getDeptTree();
+getTreeselect();
 getList();
 </script>

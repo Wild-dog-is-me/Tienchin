@@ -7,10 +7,10 @@ const useUserStore = defineStore(
   {
     state: () => ({
       token: getToken(),
-      name: '',
-      avatar: '',
-      roles: [],
-      permissions: []
+      name: '',//当前登录的用户名
+      avatar: '',//当前登录用户的头像
+      roles: [],//当前登录用户的角色
+      permissions: []//当前登录的用户角色
     }),
     actions: {
       // 登录
@@ -21,6 +21,7 @@ const useUserStore = defineStore(
         const uuid = userInfo.uuid
         return new Promise((resolve, reject) => {
           login(username, password, code, uuid).then(res => {
+            //登录成功后，将服务端返回的 token 存到 Cookie 中
             setToken(res.token)
             this.token = res.token
             resolve()

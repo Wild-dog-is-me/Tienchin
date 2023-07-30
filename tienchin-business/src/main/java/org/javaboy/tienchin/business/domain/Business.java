@@ -189,7 +189,7 @@ public class Business implements Serializable {
     /**
      * 其他意向
      */
-    private String othenIntention;
+    private String otherIntention;
 
     /**
      * 线索ID
@@ -380,11 +380,11 @@ public class Business implements Serializable {
         this.delFlag = delFlag;
     }
 
-    public String getProvince() {
+    public String getprovince() {
         return province;
     }
 
-    public void setProvince(String province) {
+    public void setprovince(String province) {
         this.province = province;
     }
 
@@ -460,12 +460,12 @@ public class Business implements Serializable {
         this.hours = hours;
     }
 
-    public String getOthenIntention() {
-        return othenIntention;
+    public String getotherIntention() {
+        return otherIntention;
     }
 
-    public void setOthenIntention(String othenIntention) {
-        this.othenIntention = othenIntention;
+    public void setotherIntention(String otherIntention) {
+        this.otherIntention = otherIntention;
     }
 
     public Integer getClueId() {
@@ -511,7 +511,7 @@ public class Business implements Serializable {
                 ", weight = " + weight +
                 ", reason = " + reason +
                 ", hours = " + hours +
-                ", othenIntention = " + othenIntention +
+                ", otherIntention = " + otherIntention +
                 ", clueId = " + clueId +
                 "}";
     }

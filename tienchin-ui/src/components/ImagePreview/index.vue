@@ -20,7 +20,7 @@ import { isExternal } from "@/utils/validate";
 const props = defineProps({
   src: {
     type: String,
-    default: ""
+    required: true
   },
   width: {
     type: [Number, String],
@@ -33,9 +33,6 @@ const props = defineProps({
 });
 
 const realSrc = computed(() => {
-  if (!props.src) {
-    return;
-  }
   let real_src = props.src.split(",")[0];
   if (isExternal(real_src)) {
     return real_src;
@@ -44,9 +41,6 @@ const realSrc = computed(() => {
 });
 
 const realSrcList = computed(() => {
-  if (!props.src) {
-    return;
-  }
   let real_src_list = props.src.split(",");
   let srcList = [];
   real_src_list.forEach(item => {

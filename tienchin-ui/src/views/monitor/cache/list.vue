@@ -4,11 +4,10 @@
       <el-col :span="8">
         <el-card style="height: calc(100vh - 125px)">
           <template #header>
-            <Collection style="width: 1em; height: 1em; vertical-align: middle;" /> <span style="vertical-align: middle;">缓存列表</span>
+            <span>缓存列表</span>
             <el-button
               style="float: right; padding: 3px 0"
-              link
-              type="primary"
+              type="text"
               icon="Refresh"
               @click="refreshCacheNames()"
             ></el-button>
@@ -49,8 +48,7 @@
             >
               <template #default="scope">
                 <el-button
-                  link
-                  type="primary"
+                  type="text"
                   icon="Delete"
                   @click="handleClearCacheName(scope.row)"
                 ></el-button>
@@ -63,11 +61,10 @@
       <el-col :span="8">
         <el-card style="height: calc(100vh - 125px)">
           <template #header>
-            <Key style="width: 1em; height: 1em; vertical-align: middle;" /> <span style="vertical-align: middle;">键名列表</span>
+            <span>键名列表</span>
             <el-button
               style="float: right; padding: 3px 0"
-              link
-              type="primary"
+              type="text"
               icon="Refresh"
               @click="refreshCacheKeys()"
             ></el-button>
@@ -100,8 +97,7 @@
             >
               <template #default="scope">
                 <el-button
-                  link
-                  type="primary"
+                  type="text"
                   icon="Delete"
                   @click="handleClearCacheKey(scope.row)"
                 ></el-button>
@@ -114,11 +110,10 @@
       <el-col :span="8">
         <el-card :bordered="false" style="height: calc(100vh - 125px)">
           <template #header>
-            <Document style="width: 1em; height: 1em; vertical-align: middle;" /> <span style="vertical-align: middle;">缓存内容</span>
+            <span>缓存内容</span>
             <el-button
               style="float: right; padding: 3px 0"
-              link
-              type="primary"
+              type="text"
               icon="Refresh"
               @click="handleClearCacheAll()"
               >清理全部</el-button
@@ -185,7 +180,7 @@ function refreshCacheNames() {
 /** 清理指定名称缓存 */
 function handleClearCacheName(row) {
   clearCacheName(row.cacheName).then(response => {
-    proxy.$modal.msgSuccess("清理缓存名称[" + row.cacheName + "]成功");
+    proxy.$modal.msgSuccess("清理缓存名称[" + nowCacheName.value + "]成功");
     getCacheKeys();
   });
 }

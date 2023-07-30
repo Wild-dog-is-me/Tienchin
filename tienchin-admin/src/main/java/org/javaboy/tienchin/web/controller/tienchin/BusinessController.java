@@ -2,7 +2,9 @@ package org.javaboy.tienchin.web.controller.tienchin;
 
 import org.javaboy.tienchin.activity.service.IActivityService;
 import org.javaboy.tienchin.business.domain.Business;
+import org.javaboy.tienchin.business.domain.vo.BusinessFollow;
 import org.javaboy.tienchin.business.domain.vo.BusinessSummary;
+import org.javaboy.tienchin.business.domain.vo.BusinessSummaryEnhance;
 import org.javaboy.tienchin.business.domain.vo.BusinessVO;
 import org.javaboy.tienchin.business.service.IBusinessService;
 import org.javaboy.tienchin.channel.service.IChannelService;
@@ -61,6 +63,11 @@ public class BusinessController extends BaseController {
         return getDataTable(list);
     }
 
+    @GetMapping("/{id}")
+    public AjaxResult getBusinessById(@PathVariable Integer id) {
+        return businessService.getBusinessById(id);
+    }
+
     @PreAuthorize("hasPermission('tienchin:business:create')")
     @GetMapping("/channels")
     public AjaxResult getAllChannels() {
@@ -73,4 +80,37 @@ public class BusinessController extends BaseController {
         return activityService.selectActivityByChannelId(channelId);
     }
 
+    @GetMapping("/all_course")
+    public AjaxResult getAllCourse() {
+        return AjaxResult.success(courseService.list());
+    }
+
+    @GetMapping("/course/{type}")
+    public AjaxResult getCourseByCourseType(@PathVariable Integer type) {
+        return courseService.getCourseByCourseType(type);
+    }
+
+    @PreAuthorize("hasPermission('tienchin:business:follow')")
+    @PostMapping("/follow")
+    public AjaxResult follow(@RequestBody @Validated BusinessFollow businessFollow) {
+        return businessService.follow(businessFollow);
+    }
+
+    @GetMapping("/summary/{businessId}")
+    @PreAuthorize("hasPermission('tienchin:business:edit')")
+    public AjaxResult getBusinessSummaryByBusinessId(@PathVariable Integer businessId) {
+        return businessService.getBusinessSummaryByBusinessId(businessId);
+    }
+
+    @PreAuthorize("hasPermission('tienchin:business:edit')")
+    @PutMapping
+    public AjaxResult updateBusiness(@RequestBody BusinessSummaryEnhance businessSummaryEnhance) {
+        return businessService.updateBusiness(businessSummaryEnhance);
+    }
+
+    @PreAuthorize("hasPermission('tienchin:business:remove')")
+    @DeleteMapping("/{businessIds}")
+    public AjaxResult deleteBusinessById(@PathVariable Integer[] businessIds) {
+        return businessService.deleteBusinessById(businessIds);
+    }
 }

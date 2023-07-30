@@ -15,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IFollowRecordService extends IService<FollowRecord> {
 
     AjaxResult getFollowRecordByClueId(Integer clueId);
+
+    AjaxResult getFollowRecordByBusinessId(Integer businessId);
 }

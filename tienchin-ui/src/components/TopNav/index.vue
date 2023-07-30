@@ -3,7 +3,6 @@
     :default-active="activeMenu"
     mode="horizontal"
     @select="handleSelect"
-    :ellipsis="false"
   >
     <template v-for="(item, index) in topMenus">
       <el-menu-item :style="{'--theme': theme}" :index="item.path" :key="index" v-if="index < visibleNumber"
@@ -97,9 +96,7 @@ const activeMenu = computed(() => {
   if (path !== undefined && path.lastIndexOf("/") > 0 && hideList.indexOf(path) === -1) {
     const tmpPath = path.substring(1, path.length);
     activePath = "/" + tmpPath.substring(0, tmpPath.indexOf("/"));
-    if (!route.meta.link) {
-        appStore.toggleSideBarHide(false);
-    }
+    appStore.toggleSideBarHide(false);
   } else if(!route.children) {
     activePath = path;
     appStore.toggleSideBarHide(true);
@@ -121,13 +118,7 @@ function handleSelect(key, keyPath) {
     window.open(key, "_blank");
   } else if (!route || !route.children) {
     // 没有子路由路径内部打开
-    const routeMenu = childrenMenus.value.find(item => item.path === key);
-    if (routeMenu && routeMenu.query) {
-      let query = JSON.parse(routeMenu.query);
-      router.push({ path: key, query: query });
-    } else {
-      router.push({ path: key });
-    }
+    router.push({ path: key });
     appStore.toggleSideBarHide(true);
   } else {
     // 显示左侧联动菜单
@@ -147,8 +138,6 @@ function activeRoutes(key) {
   }
   if(routes.length > 0) {
     permissionStore.setSidebarRouters(routes);
-  } else {
-    appStore.toggleSideBarHide(true);
   }
   return routes;
 }

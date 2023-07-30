@@ -27,4 +27,11 @@ public class FollowRecordServiceImpl extends ServiceImpl<FollowRecordMapper, Fol
         return AjaxResult.success(list(qw));
     }
 
+    @Override
+    public AjaxResult getFollowRecordByBusinessId(Integer businessId) {
+        QueryWrapper<FollowRecord> qw = new QueryWrapper<>();
+        qw.lambda().eq(FollowRecord::getType, TienChinConstants.BUSINESS_TYPE).eq(FollowRecord::getAssignId, businessId).orderByDesc(FollowRecord::getCreateTime);
+        return AjaxResult.success(list(qw));
+    }
+
 }

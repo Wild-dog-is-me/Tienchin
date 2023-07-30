@@ -87,7 +87,6 @@ import { useDynamicTitle } from '@/utils/dynamicTitle'
 import useAppStore from '@/store/modules/app'
 import useSettingsStore from '@/store/modules/settings'
 import usePermissionStore from '@/store/modules/permission'
-import { handleThemeStyle } from '@/utils/theme'
 
 const { proxy } = getCurrentInstance();
 const appStore = useAppStore()
@@ -104,8 +103,9 @@ const topNav = computed({
   get: () => storeSettings.value.topNav,
   set: (val) => {
     settingsStore.changeSetting({ key: 'topNav', value: val })
-    if (!val) {
+    if (!val) {//如果要关闭顶部导航菜单
       appStore.toggleSideBarHide(false);
+      //将 SidebarRouters 设置为 defaultRoutes，defaultRoutes 中永远都是 1-n 级菜单
       permissionStore.setSidebarRouters(permissionStore.defaultRoutes);
     }
   }
@@ -144,7 +144,6 @@ const dynamicTitle = computed({
 function themeChange(val) {
   settingsStore.changeSetting({ key: 'theme', value: val })
   theme.value = val;
-  handleThemeStyle(val);
 }
 function handleTheme(val) {
   settingsStore.changeSetting({ key: 'sideTheme', value: val })

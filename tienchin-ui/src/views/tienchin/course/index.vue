@@ -11,7 +11,7 @@
       </el-form-item>
       <el-form-item label="课程类型" prop="type">
         <el-select
-            v-model="queryParams.channelId"
+            v-model="queryParams.type"
             placeholder="课程类型"
             clearable
         >
@@ -24,7 +24,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="适用人群" prop="applyTo">
-        <el-select v-model="queryParams.status" placeholder="适用人群" clearable>
+        <el-select v-model="queryParams.applyTo" placeholder="适用人群" clearable>
           <el-option
               v-for="cat in course_apply_to"
               :key="cat.value"
@@ -96,16 +96,16 @@
     <el-table v-loading="loading" :data="courseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="课程编号" align="center" :show-overflow-tooltip="true" width="80" prop="courseId"/>
-      <el-table-column label="课程类型" align="center" width="120px">
+      <el-table-column label="课程类型" align="center" width="120">
         <template #default="scope">
-          <dict-tag :options="course_type" :value="scope.row.type"></dict-tag>
+          <dict-tag :options="course_type" :value="scope.row.type"/>
         </template>
       </el-table-column>
       <el-table-column label="课程名称" align="center" :show-overflow-tooltip="true" width="120" prop="name"/>
-      <el-table-column label="课程价格" align="center" :show-overflow-tooltip="true" width="180" prop="price"/>
+      <el-table-column label="课程价格" align="center" :show-overflow-tooltip="true" width="120" prop="price"/>
       <el-table-column label="课程适用人群" align="center" width="150">
         <template #default="scope">
-          <dict-tag :options="course_apply_to" :value="scope.row.type"/>
+          <dict-tag :options="course_apply_to" :value="scope.row.applyTo"/>
         </template>
       </el-table-column>
       <el-table-column label="课程简介" align="center" :show-overflow-tooltip="true" width="180" prop="info"/>
@@ -143,7 +143,7 @@
         @pagination="getList"
     />
 
-    <!-- 添加或修改活动对话框 -->
+    <!-- 添加或修改课程对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="courseRef" :model="form" :rules="rules" label-width="80px">
         <el-row>
@@ -250,6 +250,7 @@ const data = reactive({
 
 const {queryParams, form, rules} = toRefs(data);
 
+/** 查询课程列表 */
 function getList() {
   loading.value = true;
   listCourse(queryParams.value).then(response => {
@@ -296,6 +297,7 @@ function handleSelectionChange(selection) {
   multiple.value = !selection.length;
 }
 
+/** 新增按钮操作 */
 function handleAdd() {
   reset();
   open.value = true;
@@ -345,7 +347,6 @@ function handleDelete(row) {
   }).catch(() => {
   });
 }
-
 
 /** 导出按钮操作 */
 function handleExport() {

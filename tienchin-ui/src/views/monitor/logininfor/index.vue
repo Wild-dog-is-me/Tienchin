@@ -37,12 +37,11 @@
          <el-form-item label="登录时间" style="width: 308px">
             <el-date-picker
                v-model="dateRange"
-               value-format="YYYY-MM-DD HH:mm:ss"
+               value-format="YYYY-MM-DD"
                type="daterange"
                range-separator="-"
                start-placeholder="开始日期"
                end-placeholder="结束日期"
-               :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
             ></el-date-picker>
          </el-form-item>
          <el-form-item>
@@ -59,7 +58,7 @@
                icon="Delete"
                :disabled="multiple"
                @click="handleDelete"
-               v-hasPermi="['monitor:logininfor:remove']"
+               v-hasPermi="['system:logininfor:remove']"
             >删除</el-button>
          </el-col>
          <el-col :span="1.5">
@@ -68,18 +67,8 @@
                plain
                icon="Delete"
                @click="handleClean"
-               v-hasPermi="['monitor:logininfor:remove']"
+               v-hasPermi="['system:logininfor:remove']"
             >清空</el-button>
-         </el-col>
-         <el-col :span="1.5">
-            <el-button
-               type="primary"
-               plain
-               icon="Unlock"
-               :disabled="single"
-               @click="handleUnlock"
-               v-hasPermi="['monitor:logininfor:unlock']"
-            >解锁</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -87,7 +76,7 @@
                plain
                icon="Download"
                @click="handleExport"
-               v-hasPermi="['monitor:logininfor:export']"
+               v-hasPermi="['system:logininfor:export']"
             >导出</el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
@@ -106,7 +95,7 @@
                <dict-tag :options="sys_common_status" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="描述" align="center" prop="msg" :show-overflow-tooltip="true" />
+         <el-table-column label="描述" align="center" prop="msg" />
          <el-table-column label="访问时间" align="center" prop="loginTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
             <template #default="scope">
                <span>{{ parseTime(scope.row.loginTime) }}</span>
@@ -125,7 +114,7 @@
 </template>
 
 <script setup name="Logininfor">
-import { list, delLogininfor, cleanLogininfor, unlockLogininfor } from "@/api/monitor/logininfor";
+import { list, delLogininfor, cleanLogininfor } from "@/api/monitor/logininfor";
 
 const { proxy } = getCurrentInstance();
 const { sys_common_status } = proxy.useDict("sys_common_status");
@@ -134,9 +123,7 @@ const logininforList = ref([]);
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
-const single = ref(true);
 const multiple = ref(true);
-const selectName = ref("");
 const total = ref(0);
 const dateRange = ref([]);
 const defaultSort = ref({ prop: "loginTime", order: "descending" });
@@ -170,15 +157,13 @@ function handleQuery() {
 function resetQuery() {
   dateRange.value = [];
   proxy.resetForm("queryRef");
-  queryParams.value.pageNum = 1;
   proxy.$refs["logininforRef"].sort(defaultSort.value.prop, defaultSort.value.order);
+  handleQuery();
 }
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
   ids.value = selection.map(item => item.infoId);
   multiple.value = !selection.length;
-  single.value = selection.length != 1;
-  selectName.value = selection.map(item => item.userName);
 }
 /** 排序触发事件 */
 function handleSortChange(column, prop, order) {
@@ -203,15 +188,6 @@ function handleClean() {
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("清空成功");
-  }).catch(() => {});
-}
-/** 解锁按钮操作 */
-function handleUnlock() {
-  const username = selectName.value;
-  proxy.$modal.confirm('是否确认解锁用户"' + username + '"数据项?').then(function () {
-    return unlockLogininfor(username);
-  }).then(() => {
-    proxy.$modal.msgSuccess("用户" + username + "解锁成功");
   }).catch(() => {});
 }
 /** 导出按钮操作 */

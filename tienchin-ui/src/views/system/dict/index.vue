@@ -123,10 +123,20 @@
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
+         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:dict:edit']">修改</el-button>
-               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:dict:remove']">删除</el-button>
+               <el-button
+                  type="text"
+                  icon="Edit"
+                  @click="handleUpdate(scope.row)"
+                  v-hasPermi="['system:dict:edit']"
+               >修改</el-button>
+               <el-button
+                  type="text"
+                  icon="Delete"
+                  @click="handleDelete(scope.row)"
+                  v-hasPermi="['system:dict:remove']"
+               >删除</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -172,7 +182,6 @@
 </template>
 
 <script setup name="Dict">
-import useDictStore from '@/store/modules/dict'
 import { listType, getType, delType, addType, updateType, refreshCache } from "@/api/system/dict/type";
 
 const { proxy } = getCurrentInstance();
@@ -304,7 +313,6 @@ function handleExport() {
 function handleRefreshCache() {
   refreshCache().then(() => {
     proxy.$modal.msgSuccess("刷新成功");
-    useDictStore().cleanDict();
   });
 }
 

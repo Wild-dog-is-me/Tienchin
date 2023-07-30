@@ -25,7 +25,7 @@ defineProps({
   }
 })
 
-const title = import.meta.env.VITE_APP_TITLE;
+const title = ref('TienChin健身管理系统');
 const settingsStore = useSettingsStore();
 const sideTheme = computed(() => settingsStore.sideTheme);
 </script>

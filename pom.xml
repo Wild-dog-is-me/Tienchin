@@ -252,6 +252,11 @@
                 <artifactId>tienchin-business</artifactId>
                 <version>${tienchin.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.javaboy</groupId>
+                <artifactId>tienchin-contract</artifactId>
+                <version>${tienchin.version}</version>
+            </dependency>
 
             <!-- lombok依赖包 -->
             <dependency>
@@ -271,6 +276,7 @@
         <module>tienchin-common</module>
         <module>tienchin-channel</module>
         <module>tienchin-activity</module>
+        <module>tienchin-contract</module>
     </modules>
     <packaging>pom</packaging>
 

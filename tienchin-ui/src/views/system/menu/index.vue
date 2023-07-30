@@ -6,12 +6,11 @@
                v-model="queryParams.menuName"
                placeholder="请输入菜单名称"
                clearable
-               style="width: 200px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
          <el-form-item label="状态" prop="status">
-            <el-select v-model="queryParams.status" placeholder="菜单状态" clearable style="width: 200px">
+            <el-select v-model="queryParams.status" placeholder="菜单状态" clearable>
                <el-option
                   v-for="dict in sys_normal_disable"
                   :key="dict.value"
@@ -69,16 +68,31 @@
                <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="创建时间" align="center" width="160" prop="createTime">
+         <el-table-column label="创建时间" align="center" prop="createTime">
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" width="210" class-name="small-padding fixed-width">
+         <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:menu:edit']">修改</el-button>
-               <el-button link type="primary" icon="Plus" @click="handleAdd(scope.row)" v-hasPermi="['system:menu:add']">新增</el-button>
-               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:menu:remove']">删除</el-button>
+               <el-button
+                  type="text"
+                  icon="Edit"
+                  @click="handleUpdate(scope.row)"
+                  v-hasPermi="['system:menu:edit']"
+               >修改</el-button>
+               <el-button
+                  type="text"
+                  icon="Plus"
+                  @click="handleAdd(scope.row)"
+                  v-hasPermi="['system:menu:add']"
+               >新增</el-button>
+               <el-button
+                  type="text"
+                  icon="Delete"
+                  @click="handleDelete(scope.row)"
+                  v-hasPermi="['system:menu:remove']"
+               >删除</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -118,7 +132,7 @@
                         @show="showSelectIcon"
                      >
                         <template #reference>
-                           <el-input v-model="form.icon" placeholder="点击选择图标" @blur="showSelectIcon" v-click-outside="hideSelectIcon" readonly>
+                           <el-input v-model="form.icon" placeholder="点击选择图标" @click="showSelectIcon" v-click-outside="hideSelectIcon" readonly>
                               <template #prefix>
                                  <svg-icon
                                     v-if="form.icon"
@@ -130,7 +144,7 @@
                               </template>
                            </el-input>
                         </template>
-                        <icon-select ref="iconSelectRef" @selected="selected" :active-icon="form.icon" />
+                        <icon-select ref="iconSelectRef" @selected="selected" />
                      </el-popover>
                   </el-form-item>
                </el-col>
@@ -361,12 +375,8 @@ function selected(name) {
   showChooseIcon.value = false;
 }
 /** 图标外层点击隐藏下拉列表 */
-function hideSelectIcon(event) {
-  var elem = event.relatedTarget || event.srcElement || event.target || event.currentTarget;
-  var className = elem.className;
-  if (className !== "el-input__inner") {
-    showChooseIcon.value = false;
-  }
+function hideSelectIcon() {
+  showChooseIcon.value = false;
 }
 /** 搜索按钮操作 */
 function handleQuery() {

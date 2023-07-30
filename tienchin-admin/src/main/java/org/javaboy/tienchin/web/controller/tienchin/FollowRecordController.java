@@ -23,9 +23,14 @@ public class FollowRecordController {
     @Resource
     private IFollowRecordService followRecordService;
 
-     @GetMapping("/clue/{clueId}")
+    @GetMapping("/clue/{clueId}")
     public AjaxResult getFollowRecordByClueId(@PathVariable Integer clueId) {
         return followRecordService.getFollowRecordByClueId(clueId);
+    }
+
+    @GetMapping("/business/{businessId}")
+    public AjaxResult getFollowRecordByBusinessId(@PathVariable Integer businessId) {
+        return followRecordService.getFollowRecordByBusinessId(businessId);
     }
 
 }

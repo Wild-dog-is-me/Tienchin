@@ -1,10 +1,13 @@
 package org.javaboy.tienchin.business.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.javaboy.tienchin.assignment.domain.Assignment;
 import org.javaboy.tienchin.assignment.service.IAssignmentService;
 import org.javaboy.tienchin.business.domain.Business;
+import org.javaboy.tienchin.business.domain.vo.BusinessFollow;
 import org.javaboy.tienchin.business.domain.vo.BusinessSummary;
+import org.javaboy.tienchin.business.domain.vo.BusinessSummaryEnhance;
 import org.javaboy.tienchin.business.domain.vo.BusinessVO;
 import org.javaboy.tienchin.business.mapper.BusinessMapper;
 import org.javaboy.tienchin.business.service.IBusinessService;
@@ -12,6 +15,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.javaboy.tienchin.common.constant.TienChinConstants;
 import org.javaboy.tienchin.common.core.domain.AjaxResult;
 import org.javaboy.tienchin.common.utils.SecurityUtils;
+import org.javaboy.tienchin.common.utils.bean.BeanUtils;
+import org.javaboy.tienchin.follow.domain.FollowRecord;
+import org.javaboy.tienchin.follow.service.IFollowRecordService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +41,9 @@ public class BusinessServiceImpl extends ServiceImpl<BusinessMapper, Business> i
 
     @Resource
     private IAssignmentService assignmentService;
+
+    @Resource
+    private IFollowRecordService followRecordService;
 
     @Override
     public List<BusinessSummary> selectBusinessList(BusinessVO businessVO) {
@@ -68,5 +77,49 @@ public class BusinessServiceImpl extends ServiceImpl<BusinessMapper, Business> i
         assignmentService.save(assignment);
         return AjaxResult.success("商机录入成功");
     }
+
+    @Override
+    public AjaxResult getBusinessById(Integer id) {
+        return AjaxResult.success(getById(id));
+    }
+
+    @Override
+    public AjaxResult follow(BusinessFollow businessFollow) {
+        Business business = new Business();
+        BeanUtils.copyProperties(businessFollow, business);
+        business.setUpdateTime(LocalDateTime.now());
+        business.setUpdateBy(SecurityUtils.getUsername());
+        updateById(business);
+        FollowRecord record = new FollowRecord();
+        record.setInfo(businessFollow.getInfo());
+        record.setType(TienChinConstants.BUSINESS_TYPE);
+        record.setCreateBy(SecurityUtils.getUsername());
+        record.setAssignId(businessFollow.getBusinessId());
+        followRecordService.save(record);
+        return AjaxResult.success("商机跟进成功");
+    }
+
+    @Override
+    public AjaxResult getBusinessSummaryByBusinessId(Integer businessId) {
+        Business business = getById(businessId);
+        BusinessSummaryEnhance businessSummaryEnhance = new BusinessSummaryEnhance();
+        BeanUtils.copyProperties(business, businessSummaryEnhance);
+        return AjaxResult.success(businessSummaryEnhance);
+    }
+
+    @Override
+    public AjaxResult updateBusiness(BusinessSummaryEnhance businessSummaryEnhance) {
+        Business business = new Business();
+        BeanUtils.copyProperties(businessSummaryEnhance, business);
+        return updateById(business) ? AjaxResult.success("更新成功") : AjaxResult.error("更新失败");
+    }
+
+    @Override
+    public AjaxResult deleteBusinessById(Integer[] businessIds) {
+        UpdateWrapper<Business> uw = new UpdateWrapper<>();
+        uw.lambda().set(Business::getDelFlag, 1).eq(Business::getBusinessId, businessIds);
+        return update(uw) ? AjaxResult.success("删除成功") : AjaxResult.error("删除失败");
+    }
+
 
 }

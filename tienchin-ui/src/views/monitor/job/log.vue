@@ -119,7 +119,12 @@
          </el-table-column>
          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="View" @click="handleView(scope.row)" v-hasPermi="['monitor:job:query']">详细</el-button>
+               <el-button
+                  type="text"
+                  icon="View"
+                  @click="handleView(scope.row)"
+                  v-hasPermi="['monitor:job:query']"
+               >详细</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -261,7 +266,7 @@ function handleExport() {
 }
 
 (() => {
-  const jobId = route.params && route.params.jobId;
+  const jobId = route.query.jobId;
   if (jobId !== undefined && jobId != 0) {
     getJob(jobId).then(response => {
       queryParams.value.jobName = response.data.jobName;

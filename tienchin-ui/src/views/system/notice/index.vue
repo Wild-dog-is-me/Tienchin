@@ -1,12 +1,11 @@
 <template>
    <div class="app-container">
-      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
+      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
          <el-form-item label="公告标题" prop="noticeTitle">
             <el-input
                v-model="queryParams.noticeTitle"
                placeholder="请输入公告标题"
                clearable
-               style="width: 200px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
@@ -15,12 +14,11 @@
                v-model="queryParams.createBy"
                placeholder="请输入操作人员"
                clearable
-               style="width: 200px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
          <el-form-item label="类型" prop="noticeType">
-            <el-select v-model="queryParams.noticeType" placeholder="公告类型" clearable style="width: 200px">
+            <el-select v-model="queryParams.noticeType" placeholder="公告类型" clearable>
                <el-option
                   v-for="dict in sys_notice_type"
                   :key="dict.value"
@@ -95,8 +93,18 @@
          </el-table-column>
          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:notice:edit']">修改</el-button>
-               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:notice:remove']" >删除</el-button>
+               <el-button
+                  type="text"
+                  icon="Edit"
+                  @click="handleUpdate(scope.row)"
+                  v-hasPermi="['system:notice:edit']"
+               >修改</el-button>
+               <el-button
+                  type="text"
+                  icon="Delete"
+                  @click="handleDelete(scope.row)"
+                  v-hasPermi="['system:notice:remove']"
+               >删除</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -143,7 +151,12 @@
                </el-col>
                <el-col :span="24">
                   <el-form-item label="内容">
-                    <editor v-model="form.noticeContent" :min-height="192"/>
+                     <el-input
+                        :rows="6"
+                        type="textarea"
+                        placeholder="请输入内容"
+                        v-model="form.noticeContent"
+                     />
                   </el-form-item>
                </el-col>
             </el-row>
