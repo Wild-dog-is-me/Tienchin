@@ -1,7 +1,12 @@
 package org.javaboy.tienchin.web.controller.tienchin;
 
 import org.javaboy.tienchin.business.service.IBusinessService;
+import org.javaboy.tienchin.common.core.controller.BaseController;
 import org.javaboy.tienchin.common.core.domain.AjaxResult;
+import org.javaboy.tienchin.common.core.page.TableDataInfo;
+import org.javaboy.tienchin.contract.domain.Contract;
+import org.javaboy.tienchin.contract.domain.vo.ContractApproveInfo;
+import org.javaboy.tienchin.contract.domain.vo.ContractSummary;
 import org.javaboy.tienchin.contract.service.IContractService;
 import org.javaboy.tienchin.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * <p>
@@ -22,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/tienchin/contract")
-public class ContractController {
+public class ContractController extends BaseController {
 
     @Resource
     IContractService contractService;
@@ -45,10 +51,16 @@ public class ContractController {
         return contractService.deleteContractFile(year, month, day, name);
     }
 
-    @GetMapping("/customer/{phone}")
     @PreAuthorize("hasPermission('tienchin:contract:create')")
-    public AjaxResult geContractInfoPhone(@PathVariable String phone) {
-        return contractService.getContractInfoPhone(phone);
+    @PostMapping
+    public AjaxResult addContract(@RequestBody Contract contract) {
+        return contractService.addContract(contract);
+    }
+
+    @PreAuthorize("hasPermission('tienchin:contract:approve')")
+    @PutMapping
+    public AjaxResult updateContract(@RequestBody Contract contract) {
+        return contractService.updateContract(contract);
     }
 
     @GetMapping("/users/{deptId}")
@@ -57,5 +69,63 @@ public class ContractController {
         return sysUserService.getUsersByDeptId(deptId);
     }
 
+    @GetMapping("/customer/{phone}")
+    @PreAuthorize("hasPermission('tienchin:contract:create')")
+    public AjaxResult geContractInfoPhone(@PathVariable String phone) {
+        return contractService.getContractInfoPhone(phone);
+    }
 
+    /**
+     * 查询所有待审批的合同
+     * @return
+     */
+    @PreAuthorize("hasPermission('tienchin:contract:list')")
+    @GetMapping("/unapprove")
+    public TableDataInfo getUnapproveTask() {
+        startPage();
+        List<ContractSummary> list = contractService.getUnapproveTask();
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询当前用户已经提交但是还未审批的任务列表
+     * @return
+     */
+    @PreAuthorize("hasPermission('tienchin:contract:list')")
+    @GetMapping("/committed_task")
+    public TableDataInfo getCommittedTask() {
+        startPage();
+        List<ContractSummary> list = contractService.getCommittedTask();
+        return getDataTable(list);
+    }
+
+    /**
+     * 返回当前登录用户已经提交的并且审批通过的流程
+     * @return
+     */
+    @PreAuthorize("hasPermission('tienchin:contract:list')")
+    @GetMapping("/approved")
+    public TableDataInfo approvedTask() {
+        startPage();
+        List<ContractSummary> list = contractService.approvedTask();
+        return getDataTable(list);
+    }
+
+    @PreAuthorize("hasPermission('tienchin:contract:view')")
+    @GetMapping("/views/{contractId}")
+    public AjaxResult getContractById(@PathVariable Integer contractId) {
+        return contractService.getContractById(contractId);
+    }
+
+    @PreAuthorize("hasPermission('tienchin:contract:view')")
+    @GetMapping("/views/{year}/{month}/{day}/{name}")
+    public AjaxResult showContractPDF(@PathVariable String year, @PathVariable String month, @PathVariable String day, @PathVariable String name) {
+        return contractService.showContractPDF(year, month, day, name);
+    }
+
+    @PreAuthorize("hasPermission('tienchin:contract:approve')")
+    @PostMapping("/approve")
+    public AjaxResult approveOrReject(@RequestBody ContractApproveInfo contractApproveInfo) {
+        return contractService.approveOrReject(contractApproveInfo);
+    }
 }
