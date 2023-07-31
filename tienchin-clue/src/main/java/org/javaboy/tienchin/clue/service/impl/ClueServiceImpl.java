@@ -16,6 +16,8 @@ import org.javaboy.tienchin.clue.service.IClueService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.javaboy.tienchin.common.constant.TienChinConstants;
 import org.javaboy.tienchin.common.core.domain.AjaxResult;
+import org.javaboy.tienchin.common.core.domain.model.EchartsPoint;
+import org.javaboy.tienchin.common.core.domain.model.LineChartData;
 import org.javaboy.tienchin.common.utils.SecurityUtils;
 import org.javaboy.tienchin.follow.domain.FollowRecord;
 import org.javaboy.tienchin.follow.service.IFollowRecordService;
@@ -186,6 +188,20 @@ public class ClueServiceImpl extends ServiceImpl<ClueMapper, Clue> implements IC
         assignment.setLatest(true);
         assignmentService.save(assignment);
         return AjaxResult.success("线索成功转为商机");
+    }
+
+    @Override
+    public AjaxResult clueAnalysisData(ClueVO clueVO) {
+        if (clueVO.getParams().get("beginTime") == null || clueVO.getParams().get("endTime") == null) {
+            clueVO.getParams().put("beginTime", LocalDateTime.now().minusWeeks(1));
+            clueVO.getParams().put("endTime", LocalDateTime.now().plusWeeks(1));
+        }
+        List<EchartsPoint> increaseClue = clueMapper.increaseClue(clueVO);
+        List<EchartsPoint> totalClue = clueMapper.totalClue(clueVO);
+        LineChartData lineChartData = new LineChartData();
+        lineChartData.setIncrease(increaseClue);
+        lineChartData.setTotal(totalClue);
+        return AjaxResult.success(lineChartData);
     }
 
 }

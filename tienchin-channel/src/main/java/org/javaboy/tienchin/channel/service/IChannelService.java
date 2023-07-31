@@ -27,4 +27,5 @@ public interface IChannelService extends IService<Channel> {
 
     Boolean importChannel(List<Channel> list, boolean updateSupport);
 
+    AjaxResult channelAnalysisData(ChannelVO channelVO);
 }

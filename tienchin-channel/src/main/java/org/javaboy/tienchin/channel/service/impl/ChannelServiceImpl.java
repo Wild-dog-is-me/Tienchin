@@ -8,6 +8,7 @@ import org.javaboy.tienchin.channel.mapper.ChannelMapper;
 import org.javaboy.tienchin.channel.service.IChannelService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.javaboy.tienchin.common.core.domain.AjaxResult;
+import org.javaboy.tienchin.common.core.domain.model.PieData;
 import org.javaboy.tienchin.common.utils.SecurityUtils;
 import org.javaboy.tienchin.common.utils.bean.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -90,4 +91,15 @@ public class ChannelServiceImpl extends ServiceImpl<ChannelMapper, Channel> impl
             return saveBatch(channels);
         }
     }
+
+    @Override
+    public AjaxResult channelAnalysisData(ChannelVO channelVO) {
+        if (channelVO.getParams().get("beginTime")==null||channelVO.getParams().get("endTime")==null) {
+            channelVO.getParams().put("beginTime", LocalDateTime.now().minusWeeks(1));
+            channelVO.getParams().put("endTime", LocalDateTime.now().plusWeeks(1));
+        }
+        List<PieData> list = channelMapper.channelAnalysisData(channelVO);
+        return AjaxResult.success(list);
+    }
+
 }
