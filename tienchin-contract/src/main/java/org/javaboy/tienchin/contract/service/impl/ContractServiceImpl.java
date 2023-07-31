@@ -6,6 +6,7 @@ import com.aspose.words.PdfSaveOptions;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import liquibase.pro.packaged.E;
 import lombok.extern.slf4j.Slf4j;
 import org.flowable.engine.HistoryService;
 import org.flowable.engine.RuntimeService;
@@ -256,7 +257,6 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> i
     @Override
     public AjaxResult showContractPDF(String year, String month, String day, String name) {
         try {
-            //word 的文件完整路径
             String docFilePath = contractFolder + File.separator + year + File.separator + month + File.separator + day + File.separator + name;
             String pdfFilePath = docFilePath.replace(".docx", ".pdf").replace(".doc", ".pdf");
             File pdfFile = new File(pdfFilePath);
@@ -275,7 +275,6 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> i
             }
             return AjaxResult.success(Base64.encode(baos.toByteArray()));
         } catch (Exception e) {
-//            throw new RuntimeException(e);
             return AjaxResult.error("未加载到 PDF 文件:" + e.getMessage());
         }
     }

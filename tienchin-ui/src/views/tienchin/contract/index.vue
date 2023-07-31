@@ -128,7 +128,6 @@
             <el-button
                 type="text"
                 icon="TopRight"
-                v-if="scope.row.reason&&scope.row.approveUserName!=userStore.name"
                 @click="replienishContractInfo(scope.row)"
                 v-hasPermi="['tienchin:contract:approve']"
             >补充合同信息

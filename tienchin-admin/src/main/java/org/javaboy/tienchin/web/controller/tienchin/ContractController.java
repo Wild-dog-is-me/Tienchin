@@ -38,10 +38,9 @@ public class ContractController extends BaseController {
 
     @Resource
     IBusinessService businessService;
-
     @PreAuthorize("hasPermission('tienchin:contract:create')")
     @PostMapping("/upload")
-    public AjaxResult uploadContractFile(HttpServletRequest req, MultipartFile file) {
+    public AjaxResult uploadContractFile(HttpServletRequest req,MultipartFile file) {
         return contractService.uploadContractFile(req,file);
     }
 
@@ -86,7 +85,6 @@ public class ContractController extends BaseController {
         List<ContractSummary> list = contractService.getUnapproveTask();
         return getDataTable(list);
     }
-
     /**
      * 查询当前用户已经提交但是还未审批的任务列表
      * @return
@@ -97,6 +95,25 @@ public class ContractController extends BaseController {
         startPage();
         List<ContractSummary> list = contractService.getCommittedTask();
         return getDataTable(list);
+    }
+
+    @PreAuthorize("hasPermission('tienchin:contract:view')")
+    @GetMapping("/views/{contractId}")
+    public AjaxResult getContractById(@PathVariable Integer contractId) {
+        return contractService.getContractById(contractId);
+    }
+
+
+    @PreAuthorize("hasPermission('tienchin:contract:view')")
+    @GetMapping("/views/{year}/{month}/{day}/{name}")
+    public AjaxResult showContractPDF(@PathVariable String year, @PathVariable String month, @PathVariable String day, @PathVariable String name) {
+        return contractService.showContractPDF(year, month, day, name);
+    }
+
+    @PreAuthorize("hasPermission('tienchin:contract:approve')")
+    @PostMapping("/approve")
+    public AjaxResult approveOrReject(@RequestBody ContractApproveInfo contractApproveInfo) {
+        return contractService.approveOrReject(contractApproveInfo);
     }
 
     /**
@@ -111,21 +128,4 @@ public class ContractController extends BaseController {
         return getDataTable(list);
     }
 
-    @PreAuthorize("hasPermission('tienchin:contract:view')")
-    @GetMapping("/views/{contractId}")
-    public AjaxResult getContractById(@PathVariable Integer contractId) {
-        return contractService.getContractById(contractId);
-    }
-
-    @PreAuthorize("hasPermission('tienchin:contract:view')")
-    @GetMapping("/views/{year}/{month}/{day}/{name}")
-    public AjaxResult showContractPDF(@PathVariable String year, @PathVariable String month, @PathVariable String day, @PathVariable String name) {
-        return contractService.showContractPDF(year, month, day, name);
-    }
-
-    @PreAuthorize("hasPermission('tienchin:contract:approve')")
-    @PostMapping("/approve")
-    public AjaxResult approveOrReject(@RequestBody ContractApproveInfo contractApproveInfo) {
-        return contractService.approveOrReject(contractApproveInfo);
-    }
 }
